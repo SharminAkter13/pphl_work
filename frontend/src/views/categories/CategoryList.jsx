@@ -1,81 +1,81 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from './../../services/api';
-import Table from '../../components/Table';
 import Button from '../../components/Button';
-import Modal from '../../components/Modal';
-import CategoryForm from './CategoryForm';
-import Alert from '../../components/Alert';
 
 const CategoryList = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const [editingCategory, setEditingCategory] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [alert, setAlert] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [deleteId, setDeleteId] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/categories');
-        setCategories(response.data);
-      } catch {
-        setAlert({ type: 'error', message: 'Failed to load categories' });
-      }
-    };
-    fetchData();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
-      try {
-        await api.delete(`/categories/${id}`);
-        setCategories(categories.filter(cat => cat.id !== id));
-        setAlert({ type: 'success', message: 'Category deleted successfully' });
-      } catch {
-        setAlert({ type: 'error', message: 'Failed to delete category' });
-      }
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get('/categories');
+      setCategories(res.data);
+    } catch (err) {
+      console.error('Failed to fetch categories');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleEdit = (category) => {
-    setEditingCategory(category);
-    setShowForm(true);
-  };
+  useEffect(() => { fetchCategories(); }, []);
 
-  const handleFormClose = () => {
-    setShowForm(false);
-    setEditingCategory(null);
-    // Refetch data after form close
-    const refetch = async () => {
-      try {
-        const response = await api.get('/categories');
-        setCategories(response.data);
-      } catch {
-        setAlert({ type: 'error', message: 'Failed to refresh categories' });
-      }
-    };
-    refetch();
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/categories/${deleteId}`);
+      setDeleteId(null);
+      fetchCategories();
+    } catch {
+      alert('Error deleting category');
+    }
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4 text-white">Categories</h2>
-      {alert && <Alert type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
-      <Button onClick={() => setShowForm(true)} className="mb-4">Add Category</Button>
-      <Table
-        headers={[
-          { key: 'category_name', label: 'Name' },
-          { key: 'slug', label: 'Slug' },
-          { key: 'description', label: 'Description' },
-          { key: 'status', label: 'Status' }
-        ]}
-        rows={categories}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        sortable
-      />
-      <Modal isOpen={showForm} onClose={handleFormClose} title={editingCategory ? 'Edit Category' : 'Add Category'}>
-        <CategoryForm category={editingCategory} onClose={handleFormClose} />
-      </Modal>
+    <div className="p-6 bg-gray-900 min-h-screen text-white">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Categories</h2>
+        <Button onClick={() => navigate('/add-categories')}>Add Category</Button>
+      </div>
+
+      <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-700 text-gray-300 uppercase text-sm">
+            <tr>
+              <th className="p-4">Image</th>
+              <th className="p-4">Category Name</th>
+              <th className="p-4">Slug</th>
+              <th className="p-4">Status</th>
+              <th className="p-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-700">
+            {categories.map((cat) => (
+              <tr key={cat.id} className="hover:bg-gray-750 transition-colors">
+                <td className="p-4">
+                  <img src={cat.category_image} alt="" className="w-10 h-10 rounded object-cover bg-gray-600" />
+                </td>
+                <td className="p-4 font-medium">{cat.category_name}</td>
+                <td className="p-4 text-gray-400">{cat.slug}</td>
+                <td className="p-4">
+                  <span className={`px-2 py-1 rounded-full text-xs ${cat.status === 'Active' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'}`}>
+                    {cat.status}
+                  </span>
+                </td>
+                <td className="p-4 text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button onClick={() => navigate(`/categories/edit/${cat.id}`, { state: { category: cat } })} className="bg-blue-600 hover:bg-blue-700 text-xs">Edit</Button>
+                    <Button onClick={() => setDeleteId(cat.id)} className="bg-red-600 hover:bg-red-700 text-xs">Delete</Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      
     </div>
   );
 };

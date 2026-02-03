@@ -28,7 +28,7 @@ class SubcategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'parent_category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'subcategory_name'   => 'required|string|max:100',
             'description'        => 'nullable|string',
             'subcategory_image'  => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
@@ -36,7 +36,7 @@ class SubcategoryController extends Controller
         ]);
 
         $data = [
-            'parent_category_id' => $request->parent_category_id,
+            'category_id' => $request->category_id,
             'subcategory_name'   => $request->subcategory_name,
             'slug'               => Str::slug($request->subcategory_name),
             'description'        => $request->description,
@@ -64,15 +64,15 @@ class SubcategoryController extends Controller
         $subcategory = Subcategory::findOrFail($id);
 
         $request->validate([
-            'parent_category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'subcategory_name'   => 'required|string|max:100',
             'description'        => 'nullable|string',
             'subcategory_image'  => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'status'             => 'required|in:Active,Inactive',
+            'status'             => 'nullable',
         ]);
 
         $data = [
-            'parent_category_id' => $request->parent_category_id,
+            'category_id' => $request->category_id,
             'subcategory_name'   => $request->subcategory_name,
             'slug'               => Str::slug($request->subcategory_name),
             'description'        => $request->description,

@@ -31,7 +31,7 @@ class SupplierController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
             'contact_person' => 'nullable|string|max:100',
-            'status' => 'nullable|in:Active,Inactive',
+            'status' => 'nullable',
         ]);
 
         $supplier = Supplier::create($request->all());

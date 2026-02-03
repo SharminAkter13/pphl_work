@@ -16,12 +16,13 @@ const App = () => {
       <Routes>
 
          <Route path="/" element={<MasterLayout  />}>
-            {/* <Route index element={<CategoryList />} /> */}
+            <Route index element={<CategoryList />} />
             <Route path="categories" element={<CategoryList />} />
             <Route path="add-categories" element={<CategoryForm />} />
             <Route path="subcategories" element={<SubcategoryList />} />
             <Route path="add-subcategories" element={<SubcategoryForm  />} />
-            <Route path="products" element={<ProductList />} />
+           <Route path="products" element={<ProductList />} />
+   
             <Route path="add-products" element={<ProductForm  />} />
             <Route path="suppliers" element={<SupplierList />} />
             <Route path="add-suppliers" element={<SupplierForm  />} />
