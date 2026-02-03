@@ -3,6 +3,7 @@ import React from 'react';
 const InputGroup = ({ 
   label, 
   type = 'text', 
+  name,
   value, 
   onChange, 
   placeholder, 
@@ -17,6 +18,7 @@ const InputGroup = ({
         {icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{icon}</div>}
         <input
           type={type}
+          name={name}
           value={value}
           onChange={onChange}
           placeholder={placeholder}

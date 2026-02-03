@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Admin\Category;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -15,7 +15,7 @@ class CategoryController extends Controller
             'slug'           => 'nullable|string|max:255',
             'description'    => 'nullable|string',
             'category_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'status'         => 'required|in:Active,Inactive',
+            'status'         => 'nullable',
         ]);
 
         // Auto slug

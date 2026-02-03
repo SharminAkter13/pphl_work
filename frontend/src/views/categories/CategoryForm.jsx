@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
-import Form from './Form';
-import InputGroup from './InputGroup';
-import Button from './Button';
-import Dropdown from './Dropdown';
+import api from './../../services/api';
+import Form from '../../components/Form';
+import InputGroup from '../../components/InputGroup';
+import Button from '../../components/Button';
+import Dropdown from '../../components/Dropdown';
 
 const CategoryForm = ({ category, onClose }) => {
   const [formData, setFormData] = useState({
@@ -40,9 +40,9 @@ const CategoryForm = ({ category, onClose }) => {
 
     try {
       if (category) {
-        await api.post(`/admin/categories/${category.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post(`/categories/${category.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
-        await api.post('/admin/categories', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post('/categories', data, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
       onClose();
     } catch (error) {

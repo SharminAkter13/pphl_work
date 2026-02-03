@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Admin\Product;
-use App\Models\Admin\Category;
-use App\Models\Admin\Subcategory;
-use App\Models\Admin\Supplier;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Supplier;
 
 class ProductController extends Controller
 {
-    public function list()
+    public function index()
     {
         $products = Product::with(['category','subcategory','supplier'])->latest()->get();
-        return response()->json($products);
+        return response()->json($products, 200);
     }
 
     public function show($id)
@@ -36,8 +36,8 @@ class ProductController extends Controller
             'product_image'=>'nullable|image|max:2048',
             'color'=>'nullable|string|max:50',
             'size'=>'nullable|string|max:50',
-            'featured'=>'nullable|in:Yes,No',
-            'status'=>'nullable|in:Active,Inactive',
+           
+            'status'=>'nullable',
         ]);
 
         if($request->hasFile('product_image')){
@@ -69,7 +69,7 @@ class ProductController extends Controller
             'product_image'=>'nullable|image|max:2048',
             'color'=>'nullable|string|max:50',
             'size'=>'nullable|string|max:50',
-            'featured'=>'nullable|in:Yes,No',
+            
             'status'=>'nullable|in:Active,Inactive',
         ]);
 

@@ -1,15 +1,22 @@
-import { api } from './api';
+// src/services/productService.js
+import api from "./api";
 
-export const productService = {
-  getAll: () => api.get("/products").then(res => res.data),
-  
-  create: (formData) => api.post("/products", formData, {
-    headers: { "Content-Type": "multipart/form-data" }
-  }),
+export const getProducts = () => {
+  return api.get("/products");
+};
 
-  update: (id, formData) => api.post(`/products/${id}?_method=PUT`, formData, {
-    headers: { "Content-Type": "multipart/form-data" }
-  }),
+export const getProduct = (id) => {
+  return api.get(`/products/${id}`);
+};
 
-  delete: (id) => api.delete(`/products/${id}`)
+export const createProduct = (data) => {
+  return api.post("/products", data);
+};
+
+export const updateProduct = (id, data) => {
+  return api.put(`/products/${id}`, data);
+};
+
+export const deleteProduct = (id) => {
+  return api.delete(`/products/${id}`);
 };

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Admin\Supplier;
+use App\Models\Supplier;
 
 class SupplierController extends Controller
 {
@@ -53,7 +53,7 @@ class SupplierController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
             'contact_person' => 'nullable|string|max:100',
-            'status' => 'nullable|in:Active,Inactive',
+            'status' => 'nullable',
         ]);
 
         $supplier->update($request->all());

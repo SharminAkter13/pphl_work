@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\Admin\Subcategory;
-use App\Models\Admin\Category;
+use App\Models\Subcategory;
+use App\Models\Category;
 
 class SubcategoryController extends Controller
 {
@@ -32,7 +32,7 @@ class SubcategoryController extends Controller
             'subcategory_name'   => 'required|string|max:100',
             'description'        => 'nullable|string',
             'subcategory_image'  => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'status'             => 'required|in:Active,Inactive',
+            'status'             => 'nullable',
         ]);
 
         $data = [

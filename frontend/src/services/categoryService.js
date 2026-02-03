@@ -1,22 +1,18 @@
-import { api } from './api';
+// src/services/categoryService.js
+import api from "./api";
 
-export const categoryService = {  getAll: async () => {
-    const response = await api.get("/categories");
-    return response.data;
-  },
+export const createCategory = (data) => {
+  return api.post("/categories", data);
+};
 
-  create: async (data) => {
-    const response = await api.post("/categories", data);
-    return response.data;
-  },
+export const getCategory = (id) => {
+  return api.get(`/categories/${id}`);
+};
 
-  update: async (id, data) => {
-    const response = await api.put(`/categories/${id}`, data);
-    return response.data;
-  },
+export const updateCategory = (id, data) => {
+  return api.put(`/categories/${id}`, data);
+};
 
-  delete: async (id) => {
-    const response = await api.delete(`/categories/${id}`);
-    return response.data;
-  }
+export const deleteCategory = (id) => {
+  return api.delete(`/categories/${id}`);
 };

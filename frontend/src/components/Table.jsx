@@ -1,20 +1,20 @@
 import React, { useMemo } from 'react';
 
-const Table = ({ 
-  headers, 
-  rows, 
-  onEdit, 
-  onDelete, 
-  sortable = false, 
-  className = '' 
-}) => {
+const Table = ({ headers, rows, onEdit, onDelete, sortable = false, className = '' }) => {
   const [sortConfig, setSortConfig] = React.useState({ key: null, direction: 'asc' });
 
-  const sortedRows = useMemo(() => {
+  const getNestedValue = (obj, key) => {
+    return key.split('.').reduce((acc, part) => acc && acc[part], obj) || '';
+  };
+
+  const sortedRows = React.useMemo(() => {
     if (!sortable || !sortConfig.key) return rows;
     return [...rows].sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+      const aValue = getNestedValue(a, sortConfig.key);
+      const bValue = getNestedValue(b, sortConfig.key);
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
       return 0;
     });
   }, [rows, sortConfig, sortable]);
@@ -51,7 +51,7 @@ const Table = ({
             <tr key={index}>
               {headers.map((header, i) => (
                 <td key={i} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                  {row[header.key]}
+                  {getNestedValue(row, header.key)}
                 </td>
               ))}
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

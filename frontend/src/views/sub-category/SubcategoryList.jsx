@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
-import Table from './Table';
-import Button from './Button';
-import Modal from './Modal';
+import api from './../../services/api';
+import Table from '../../components/Table';
+import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 import SubcategoryForm from './SubcategoryForm';
-import Alert from './Alert';
+import Alert from '../../components/Alert';
 
 const SubcategoryList = () => {
   const [subcategories, setSubcategories] = useState([]);
@@ -15,7 +15,7 @@ const SubcategoryList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/admin/subcategories');
+        const response = await api.get('/sub-cat');
         setSubcategories(response.data);
       } catch {
         setAlert({ type: 'error', message: 'Failed to load subcategories' });
@@ -27,7 +27,7 @@ const SubcategoryList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this subcategory?')) {
       try {
-        await api.delete(`/admin/subcategories/${id}`);
+        await api.delete(`/subcategories/${id}`);
         setSubcategories(subcategories.filter(sub => sub.id !== id));
         setAlert({ type: 'success', message: 'Subcategory deleted successfully' });
       } catch {
@@ -47,7 +47,7 @@ const SubcategoryList = () => {
     // Refetch data after form close
     const refetch = async () => {
       try {
-        const response = await api.get('/admin/subcategories');
+        const response = await api.get('/sub-cat');
         setSubcategories(response.data);
       } catch {
         setAlert({ type: 'error', message: 'Failed to refresh subcategories' });
@@ -58,7 +58,7 @@ const SubcategoryList = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Subcategories</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">Subcategories</h2>
       {alert && <Alert type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
       <Button onClick={() => setShowForm(true)} className="mb-4">Add Subcategory</Button>
       <Table

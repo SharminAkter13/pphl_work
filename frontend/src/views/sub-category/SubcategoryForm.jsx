@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
-import Form from './Form';
-import InputGroup from './InputGroup';
-import Button from './Button';
-import Dropdown from './Dropdown';
+import api from './../../services/api';
+import Form from '../../components/Form';
+import InputGroup from '../../components/InputGroup';
+import Button from '../../components/Button';
+import Dropdown from '../../components/Dropdown';
 
 const SubcategoryForm = ({ subcategory, onClose }) => {
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ const SubcategoryForm = ({ subcategory, onClose }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get('/admin/categories');
+      const response = await api.get('/categories');
       setCategories(response.data);
     } catch {
       alert('Failed to load categories');
@@ -51,9 +51,9 @@ const SubcategoryForm = ({ subcategory, onClose }) => {
 
     try {
       if (subcategory) {
-        await api.post(`/admin/subcategories/${subcategory.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post(`/sub-cat/${subcategory.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
-        await api.post('/admin/subcategories', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post('/sub-cat', data, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
       onClose();
     } catch {

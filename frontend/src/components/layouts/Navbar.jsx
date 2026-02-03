@@ -1,12 +1,12 @@
 // src/components/Navbar.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../contexts/ThemeContext';
-import ThemeToggle from './ThemeToggle';
+// import { useTheme } from '../Theme';
+// import ThemeToggle from '../ThemeToggle';
 
 const Navbar = ({ user, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { theme } = useTheme();
+  // const { theme} = useTheme();
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-md">
@@ -33,7 +33,6 @@ const Navbar = ({ user, onLogout }) => {
             <Link to="/suppliers" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
               Suppliers
             </Link>
-            <ThemeToggle />
             {user && (
               <div className="relative">
                 <button
@@ -86,7 +85,6 @@ const Navbar = ({ user, onLogout }) => {
                 Suppliers
               </Link>
               <div className="px-3 py-2">
-                <ThemeToggle />
               </div>
               {user && (
                 <button

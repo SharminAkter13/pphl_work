@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
-import Table from './Table';
-import Button from './Button';
-import Modal from './Modal';
+import api from './../../services/api';
+import Table from '../../components/Table';
+import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 import CategoryForm from './CategoryForm';
-import Alert from './Alert';
+import Alert from '../../components/Alert';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -15,7 +15,7 @@ const CategoryList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/admin/categories');
+        const response = await api.get('/categories');
         setCategories(response.data);
       } catch {
         setAlert({ type: 'error', message: 'Failed to load categories' });
@@ -27,7 +27,7 @@ const CategoryList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await api.delete(`/admin/categories/${id}`);
+        await api.delete(`/categories/${id}`);
         setCategories(categories.filter(cat => cat.id !== id));
         setAlert({ type: 'success', message: 'Category deleted successfully' });
       } catch {
@@ -47,7 +47,7 @@ const CategoryList = () => {
     // Refetch data after form close
     const refetch = async () => {
       try {
-        const response = await api.get('/admin/categories');
+        const response = await api.get('/categories');
         setCategories(response.data);
       } catch {
         setAlert({ type: 'error', message: 'Failed to refresh categories' });
@@ -58,7 +58,7 @@ const CategoryList = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Categories</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">Categories</h2>
       {alert && <Alert type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
       <Button onClick={() => setShowForm(true)} className="mb-4">Add Category</Button>
       <Table

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
-import Form from './Form';
-import InputGroup from './InputGroup';
-import Button from './Button';
-import Dropdown from './Dropdown';
+import api from './../../services/api';
+import Form from '../../components/Form';
+import InputGroup from '../../components/InputGroup';
+import Button from '../../components/Button';
+import Dropdown from '../../components/Dropdown';
 
 const SupplierForm = ({ supplier, onClose }) => {
   const [formData, setFormData] = useState({
@@ -38,9 +38,9 @@ const SupplierForm = ({ supplier, onClose }) => {
     setLoading(true);
     try {
       if (supplier) {
-        await api.put(`/admin/suppliers/${supplier.id}`, formData);
+        await api.put(`/supplier/${supplier.id}`, formData);
       } else {
-        await api.post('/admin/suppliers', formData);
+        await api.post('/supplier', formData);
       }
       onClose();
     } catch {

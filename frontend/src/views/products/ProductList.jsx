@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
-import Table from './Table';
-import Button from './Button';
-import Modal from './Modal';
+import api from './../../services/api';
+import Table from '../../components/Table';
+import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 import ProductForm from './ProductForm';
-import Alert from './Alert';
+import Alert from '../../components/Alert';
+
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -15,7 +16,7 @@ const ProductList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/admin/products');
+        const response = await api.get('/products');
         setProducts(response.data);
       } catch {
         setAlert({ type: 'error', message: 'Failed to load products' });
@@ -27,7 +28,7 @@ const ProductList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await api.delete(`/admin/products/${id}`);
+        await api.delete(`/products/${id}`);
         setProducts(products.filter(prod => prod.id !== id));
         setAlert({ type: 'success', message: 'Product deleted successfully' });
       } catch {
@@ -47,7 +48,7 @@ const ProductList = () => {
     // Refetch data after form close
     const refetch = async () => {
       try {
-        const response = await api.get('/admin/products');
+        const response = await api.get('/products');
         setProducts(response.data);
       } catch {
         setAlert({ type: 'error', message: 'Failed to refresh products' });
@@ -58,7 +59,7 @@ const ProductList = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Products</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">Products</h2>
       {alert && <Alert type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
       <Button onClick={() => setShowForm(true)} className="mb-4">Add Product</Button>
       <Table

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('product_image')->nullable();
             $table->string('color')->nullable();
             $table->string('size')->nullable();
-            $table->enum('featured', ['Yes', 'No'])->default('No');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
