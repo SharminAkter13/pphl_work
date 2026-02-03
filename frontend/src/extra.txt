@@ -1,0 +1,54 @@
+namespace App\Http\Controllers;
+
+use App\Models\Employee;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+class EmployeeController extends Controller
+{
+    public function index()
+    {
+        return response()->json(Employee::all());
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        $data['password'] = Hash::make($request->password);
+
+        if ($request->hasFile('profile_image')) {
+            $data['profile_image'] = $request->file('profile_image')->store('employees');
+        }
+
+        if ($request->hasFile('resume')) {
+            $data['resume'] = $request->file('resume')->store('resumes');
+        }
+
+        $employee = Employee::create($data);
+        return response()->json($employee, 201);
+    }
+
+    public function show($id)
+    {
+        return response()->json(Employee::findOrFail($id));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $employee = Employee::findOrFail($id);
+        $data = $request->all();
+
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $employee->update($data);
+        return response()->json($employee);
+    }
+
+    public function destroy($id)
+    {
+        Employee::destroy($id);
+        return response()->json(['message' => 'Employee deleted']);
+    }
+}

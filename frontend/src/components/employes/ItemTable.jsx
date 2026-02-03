@@ -1,47 +1,70 @@
-// src/components/ItemTable.js
-import React, { useEffect, useState } from "react";
-import { Table, message } from "antd";
-import { fetchItems } from "../services/api";
-import DeleteButton from "./DeleteButton";
-import EditButton from "./EditButton";
-import ViewButton from "./ViewButton";
-import PrintButton from "./PrintButton";
+// src/components/employes/ItemTable.js
+import React from "react";
+import { Table } from "antd";
+import Delete from "./Delete";
+import Edit from "./Edit";
+import View from "./View";
+import Print from "./Print";
 
-const Table = () => {
-  const [items, setItems] = useState([]);
+const ItemTable = ({ dataSource }) => {
+  const generateColumns = (data) => {
+    if (!data || data.length === 0) return [];
 
-  const loadItems = async () => {
-    try {
-      const res = await fetchItems();
-      setItems(res.data);
-    } catch (err) {
-      message.error("Failed to fetch items");
-    }
-  };
+    const keys = Object.keys(data[0]);
+    const dynamicColumns = keys.map((key) => ({
+      title: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " "),
+      dataIndex: key,
+      key,
+      render: (value) => {
+        if (key === "profile_image" && value) {
+          return (
+            <img
+              src={`http://localhost:8000/storage/${value}`} 
+              alt="Profile"
+              style={{ width: 50, height: 50, objectFit: "cover" }}
+            />
+          );
+        } else if ((key === "resume" || (value && typeof value === 'string' && value.endsWith && value.endsWith(".pdf"))) && value) {
+          
+          return (
+            <a href={`http://localhost:8000/storage/${value}`} target="_blank" rel="noopener noreferrer">
+              View PDF
+            </a>
+          );
+        } else {
+          return value;
+        }
+      },
+    }));
 
-  useEffect(() => {
-    loadItems();
-  }, []);
-
-  const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Description", dataIndex: "description", key: "description" },
-    {
+    // Add Actions column with buttons like View
+    dynamicColumns.push({
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <>
-          <EditButton item={record} onUpdated={loadItems} />
-          <DeleteButton itemId={record.id} onDeleted={loadItems} />
-          <ViewButton item={record} />
-          <PrintButton item={record} />
-        </>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <View item={record} />
+          <Edit item={record} onUpdated={() => window.location.reload()} /> {/* Assuming onUpdated reloads or fetches */}
+          <Delete itemId={record.id} onDeleted={() => window.location.reload()} />
+          <Print item={record} />
+        </div>
       ),
-    },
-  ];
+    });
 
-  return <Table columns={columns} dataSource={items} rowKey="id" />;
+    return dynamicColumns;
+  };
+
+  const columns = generateColumns(dataSource);
+
+  return (
+    <Table
+      columns={columns}
+      dataSource={dataSource}
+      rowKey="id"
+      className="w-1/3"
+      pagination={{ pageSize: 10 }}
+    />
+  );
 };
 
-export default Table;
+export default ItemTable;

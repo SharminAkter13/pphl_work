@@ -1,7 +1,7 @@
 // src/components/DeleteButton.js
 import React from "react";
 import { Button, Popconfirm, message } from "antd";
-import { deleteItem } from "../services/api";
+import { deleteItem } from "../../services/api";
 
 const Delete = ({ itemId, onDeleted }) => {
   const handleDelete = async () => {

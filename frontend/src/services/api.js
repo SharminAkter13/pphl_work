@@ -93,6 +93,27 @@ export const deleteProduct = (id) => {
 };
 
 
+export const fetchItems = () => {
+  return api.get("/employees");
+};
+
+export const getEmployees = (id) => {
+  return api.get(`/employees/${id}`);
+};
+
+export const createEmployees = (data) => {
+  return api.post("/employees", data);
+};
+
+export const updateEmployees = (id, data) => {
+  return api.put(`/employees/${id}`, data);
+};
+
+export const deleteItem = (id) => {
+  return api.delete(`/employees/${id}`);
+};
+
+
 
 
 

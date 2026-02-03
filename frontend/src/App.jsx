@@ -8,6 +8,7 @@ import SubcategoryList from './views/sub-category/SubcategoryList';
 import SubcategoryForm from './views/sub-category/SubcategoryForm';
 import SupplierList from './views/suppliers/SupplierList';
 import SupplierForm from './views/suppliers/SupplierForm';
+import EmployerCurd from './views/employers/EmployerCurd';
 import MasterLayout from "./components/layouts/MasterLayout";
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="add-products" element={<ProductForm  />} />
             <Route path="suppliers" element={<SupplierList />} />
             <Route path="add-suppliers" element={<SupplierForm  />} />
+            <Route path="employees" element={<EmployerCurd  />} />
           </Route>
         
       </Routes>

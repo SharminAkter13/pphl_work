@@ -1,27 +1,26 @@
-// src/components/EditButton.js
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
 import Form from "./Form";
 
 const Edit = ({ item, onUpdated }) => {
-  const [visible, setVisible] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Button type="link" onClick={() => setVisible(true)}>
+      <Button type="link" onClick={() => setOpen(true)}>
         Edit
       </Button>
       <Modal
         title="Edit Item"
-        visible={visible}
-        onCancel={() => setVisible(false)}
+        open={open}
+        onCancel={() => setOpen(false)}
         footer={null}
-        destroyOnClose
+        destroyOnHidden 
       >
         <Form
           item={item}
           onSuccess={() => {
-            setVisible(false);
+            setOpen(false);
             onUpdated && onUpdated();
           }}
         />
