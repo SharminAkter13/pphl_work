@@ -45,7 +45,6 @@ const EmployeeCRUD = () => {
     { name: 'phone', label: 'Phone', shortLabel: 'Ph', type: 'text' },
     { name: 'website', label: 'Website', shortLabel: 'Web', type: 'url' },
     { name: 'office_time', label: 'Office Time', shortLabel: 'Time', type: 'time' },
-
     { 
       name: 'dob', 
       label: 'Birth Date', 
@@ -72,9 +71,8 @@ const EmployeeCRUD = () => {
     },
     { name: 'salary_range', label: 'Salary', shortLabel: 'Sal', type: 'range' },
     { name: 'favorite_color', label: 'Color', shortLabel: 'Clr', type: 'color' },
-    { name: 'joining_month', label: 'Join Month', shortLabel: 'Mth', type: 'month' },
-    { name: 'joining_week', label: 'Join Week', shortLabel: 'Wk', type: 'week' },
-
+    { name: 'joining_month', label: 'Join Month', shortLabel: 'Mth', type: 'month', hideInTable: true  },
+    { name: 'joining_week', label: 'Join Week', shortLabel: 'Wk', type: 'week', hideInTable: true  },
     { 
       name: 'skills', 
       label: 'Skills', 
@@ -97,7 +95,6 @@ const EmployeeCRUD = () => {
     try {
       const response = await getEmployees();
       const data = response.data || [];
-      // Ensure skills are parsed if they come as a JSON string
       const formatted = data.map(emp => ({
         ...emp,
         skills: typeof emp.skills === 'string' ? JSON.parse(emp.skills) : emp.skills
@@ -171,8 +168,8 @@ const EmployeeCRUD = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded shadow-sm border p-4">
+    <div className="p-4 bg-gray-50 min-h-screen" style={{ overflowX: 'hidden' }}>  {/* Prevent horizontal scroll on the entire page */}
+      <div className="bg-white rounded shadow-sm border p-4" style={{ width: '100%' }}>  {/* Ensure full width but no overflow */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xs font-bold text-gray-500 uppercase">Employee Management</h2>
           <button onClick={() => handleAction('add')} className="bg-blue-600 text-white px-3 py-1 rounded text-xs flex items-center">
@@ -187,33 +184,36 @@ const EmployeeCRUD = () => {
         {loading ? (
           <div className="text-center py-10">Loading...</div>
         ) : (
-          <Table 
-            fields={tableFields} 
-            data={filteredData} 
-            dense={true} 
-            onView={(r) => handleAction('view', r)}
-            onEdit={(r) => handleAction('edit', r)}
-            onDelete={(r) => handleAction('delete', r)}
-            onPrint={(r) => handleAction('print', r)}
-          />
+          <div style={{ overflowX: 'hidden', width: '100%' }}>  
+            <Table 
+              fields={tableFields} 
+              data={filteredData} 
+              dense={true} 
+              style={{ tableLayout: 'fixed', width: '100%' }} 
+              onView={(r) => handleAction('view', r)}
+              onEdit={(r) => handleAction('edit', r)}
+              onDelete={(r) => handleAction('delete', r)}
+              onPrint={(r) => handleAction('print', r)}
+            />
+          </div>
         )}
       </div>
-{isModalOpen && (
-  <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={`${modalType?.toUpperCase()} Record`}>
-    {modalType === 'delete' && (
-      <Delete onConfirm={onConfirmDelete} onClose={() => setIsModalOpen(false)} />
-    )}
-    {modalType === 'view' && (
-      <View data={currentRecord} fields={allFields} />
-    )}
-    {modalType === 'print' && (
-      <Print data={currentRecord} fields={tableFields} />
-    )}
-    {(modalType === 'add' || modalType === 'edit') && (
-      <Form fields={allFields} initialData={currentRecord || {}} onSubmit={onFormSubmit} onCancel={() => setIsModalOpen(false)} />
-    )}
-  </Modal>
-)}
+      {isModalOpen && (
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={`${modalType?.toUpperCase()} Record`}>
+          {modalType === 'delete' && (
+            <Delete onConfirm={onConfirmDelete} onClose={() => setIsModalOpen(false)} />
+          )}
+          {modalType === 'view' && (
+            <View data={currentRecord} fields={allFields} />
+          )}
+          {modalType === 'print' && (
+            <Print data={currentRecord} fields={tableFields} />
+          )}
+          {(modalType === 'add' || modalType === 'edit') && (
+            <Form fields={allFields} initialData={currentRecord || {}} onSubmit={onFormSubmit} onCancel={() => setIsModalOpen(false)} />
+          )}
+        </Modal>
+      )}
     </div>
   );
 };

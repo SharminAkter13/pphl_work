@@ -1,10 +1,15 @@
 import React from 'react';
 import { FaEdit, FaTrash, FaEye, FaPrint } from 'react-icons/fa'; 
 
-const Table = ({ fields, data, dense = false, onEdit, onDelete, onView, onPrint }) => {
+const Table = ({ fields, data, dense = false, onEdit, onDelete, onView, onPrint, style = {} }) => {
+  const tableStyle = { tableLayout: 'fixed', width: '100%', ...style };
+
   return (
-    <div className="overflow-x-auto w-full border rounded-md shadow-sm">
-      <table className={`min-w-full bg-white border-collapse ${dense ? 'text-[10px]' : 'text-sm'}`}>
+    <div className="overflow-x-hidden w-full border rounded-md shadow-sm">  
+      <table 
+        className={`min-w-full bg-white border-collapse ${dense ? 'text-[10px]' : 'text-sm'}`}
+        style={tableStyle}  
+      >
         <thead className="bg-gray-100">
           <tr>
             {fields.map(field => (
@@ -19,13 +24,15 @@ const Table = ({ fields, data, dense = false, onEdit, onDelete, onView, onPrint 
           {data.length > 0 ? data.map((record, index) => (
             <tr key={index} className="hover:bg-blue-50/40 border-b last:border-0 transition-colors">
               {fields.map(field => (
-                <td key={field.name} className="p-2 whitespace-nowrap text-gray-600">
-                  {field.type === 'color' ? (
-                    <div className="w-3 h-3 rounded-full border" style={{ backgroundColor: record[field.name] }} />
-                  ) : field.type === 'file' ? (
-                    record[field.name] ? '📎' : '-'
-                  ) : (
-                    record[field.name]?.toString() || '-'
+                <td key={field.name} className="p-2 whitespace-nowrap text-gray-600 overflow-hidden text-ellipsis max-w-0">  
+                  {field.render ? field.render(record[field.name], record) : (  
+                    field.type === 'color' ? (
+                      <div className="w-3 h-3 rounded-full border" style={{ backgroundColor: record[field.name] }} />
+                    ) : field.type === 'file' ? (
+                      record[field.name] ? '📎' : '-'
+                    ) : (
+                      record[field.name]?.toString() || '-'
+                    )
                   )}
                 </td>
               ))}

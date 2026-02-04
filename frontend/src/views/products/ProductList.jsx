@@ -4,15 +4,15 @@ import api from './../../services/api';
 // import Table from '../../components/Table';
 import Button from '../../components/Button';
 import Alert from '../../components/Alert';
-import Modal from '../../components/modal/Modal '; // Kept as your requested path
-import Print from '../../components/employes/Print'; // Kept as your requested path
+import Modal from '../../components/modal/Modal '; 
+import Print from '../../components/employes/Print'; 
 import Table from '../../components/table/Table';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [alert, setAlert] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // For Print Modal
-  const [currentRecord, setCurrentRecord] = useState(null); // Track which product to print
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentRecord, setCurrentRecord] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,7 +45,6 @@ const ProductList = () => {
     navigate('/add-products', { state: { product } }); 
   };
 
-  // Add Print Handler
   const handlePrint = (product) => {
     setCurrentRecord(product);
     setIsModalOpen(true);
@@ -75,23 +74,31 @@ const ProductList = () => {
     },
     { name: 'status', label: 'Status' }
   ]}
-  data={products} // Change "rows" to "data"
+  data={products} 
   onEdit={handleEdit}
   onDelete={handleDelete}
   onPrint={handlePrint} 
   dense={true}
 />
       
-      {/* Print Modal Section */}
-      {isModalOpen && (
-        <Modal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          title="Print Product Information"
-        >
-          <Print data={currentRecord} />
-        </Modal>
-      )}
+    {isModalOpen && (
+  <Modal 
+    isOpen={isModalOpen} 
+    onClose={() => setIsModalOpen(false)} 
+    title="Print Product Information"
+  >
+    <Print 
+      data={currentRecord} 
+      fields={[
+        { name: 'product_name', label: 'Product Name' },
+        { name: 'sku', label: 'SKU' },
+        { name: 'base_price', label: 'Base Price' },
+        { name: 'status', label: 'Status' },
+        { name: 'description', label: 'Description' }
+      ]} 
+    />
+  </Modal>
+)}
     </div>
   );
 };
