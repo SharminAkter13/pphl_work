@@ -22,14 +22,16 @@ return new class extends Migration {
             $table->time('office_time')->nullable();
             $table->dateTime('joining_datetime')->nullable();
 
-            $table->string('department')->nullable(); // radio
-            $table->boolean('is_active')->default(false); // checkbox
+            $table->string('department')->nullable(); // Radio buttons (single selection)
+            $table->boolean('is_active')->default(false); // Single checkbox
 
-            $table->integer('salary_range')->nullable(); // range
-            $table->string('favorite_color')->nullable(); // color
+            $table->json('skills')->nullable(); // New: Multiple checkboxes (e.g., ["JavaScript", "React"])
 
-            $table->string('profile_image')->nullable(); // file/image
-            $table->string('resume')->nullable(); // file
+            $table->integer('salary_range')->nullable(); // Range
+            $table->string('favorite_color')->nullable(); // Color
+
+            $table->string('profile_image')->nullable(); // File/image
+            $table->string('resume')->nullable(); // File
 
             $table->string('joining_month')->nullable();
             $table->string('joining_week')->nullable();

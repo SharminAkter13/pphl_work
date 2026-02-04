@@ -27,19 +27,22 @@ class EmployeeController extends Controller
             'dob' => 'nullable|date',
             'office_time' => 'nullable|date_format:H:i',
             'joining_datetime' => 'nullable|date',
-            'department' => 'required|in:HR,IT',
-            'is_active' => 'boolean',
-            'salary_range' => 'integer|min:0|max:100',
+            'department' => 'nullable|in:HR,IT,Finance,Marketing', // Radio (single)
+            'is_active' => 'boolean', // Single checkbox
+            'skills' => 'nullable|array', // Multiple checkboxes
+            'skills.*' => 'in:JavaScript,React,PHP,Laravel,Python', // Valid skill options
+            'salary_range' => 'nullable|integer|min:0|max:100',
             'favorite_color' => 'nullable|string|regex:/^#[a-fA-F0-9]{6}$/',
             'joining_month' => 'nullable|string|regex:/^\d{4}-\d{2}$/',
             'joining_week' => 'nullable|string|regex:/^\d{4}-W\d{2}$/',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Max 2MB
-            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120',  // Max 5MB
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         // Prepare data
         $data = $request->all();
-        $data['password'] = Hash::make($request->password);  // Hash password
+        $data['password'] = Hash::make($request->password);
+        $data['skills'] = json_encode($request->skills); // Store as JSON
 
         // Handle file uploads
         if ($request->hasFile('profile_image')) {
@@ -57,27 +60,31 @@ class EmployeeController extends Controller
 
     public function show($id)
     {
-        return Employee::findOrFail($id);
+        $employee = Employee::findOrFail($id);
+        $employee->skills = json_decode($employee->skills, true); // Decode for frontend
+        return $employee;
     }
 
     public function update(Request $request, $id)
     {
         $employee = Employee::findOrFail($id);
 
-        // Validation (similar to store, but make email unique except for this employee)
+        // Validation
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email,' . $id,
-            'password' => 'nullable|string|min:8',  // Optional on update
+            'password' => 'nullable|string|min:8',
             'phone' => 'nullable|string|max:20',
             'website' => 'nullable|url',
             'age' => 'nullable|integer|min:1|max:120',
             'dob' => 'nullable|date',
             'office_time' => 'nullable|date_format:H:i',
             'joining_datetime' => 'nullable|date',
-            'department' => 'required|in:HR,IT',
+            'department' => 'nullable|in:HR,IT,Finance,Marketing',
             'is_active' => 'boolean',
-            'salary_range' => 'integer|min:0|max:100',
+            'skills' => 'nullable|array',
+            'skills.*' => 'in:JavaScript,React,PHP,Laravel,Python',
+            'salary_range' => 'nullable|integer|min:0|max:100',
             'favorite_color' => 'nullable|string|regex:/^#[a-fA-F0-9]{6}$/',
             'joining_month' => 'nullable|string|regex:/^\d{4}-\d{2}$/',
             'joining_week' => 'nullable|string|regex:/^\d{4}-W\d{2}$/',
@@ -90,10 +97,11 @@ class EmployeeController extends Controller
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         } else {
-            unset($data['password']);  // Don't update if not provided
+            unset($data['password']);
         }
+        $data['skills'] = json_encode($request->skills);
 
-        // Handle file uploads (delete old files if new ones are uploaded)
+        // Handle file uploads
         if ($request->hasFile('profile_image')) {
             if ($employee->profile_image) {
                 Storage::disk('public')->delete($employee->profile_image);
