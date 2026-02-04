@@ -1,67 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { FaEdit, FaTrash, FaEye, FaPrint, FaSearch, FaPlus } from 'react-icons/fa'; 
+import React from 'react';
+import { FaEdit, FaTrash, FaEye, FaPrint } from 'react-icons/fa'; 
 
-
-const Table = ({ fields, data, primaryKey = 'id', enableSelect = true, onSelect, onEdit, onDelete, onView, onPrint }) => {
-  const [selectedRecords, setSelectedRecords] = useState([]);
-
-  const handleSelect = (record) => {
-    const newSelected = selectedRecords.includes(record) 
-      ? selectedRecords.filter(r => r !== record) 
-      : [...selectedRecords, record];
-    setSelectedRecords(newSelected);
-    onSelect && onSelect(newSelected);
-  };
-
-  const handleSelectAll = () => {
-    const newSelected = selectedRecords.length === data.length ? [] : data;
-    setSelectedRecords(newSelected);
-    onSelect && onSelect(newSelected);
-  };
-
+const Table = ({ fields, data, dense = false, onEdit, onDelete, onView, onPrint }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-300">
-        <thead>
+    <div className="overflow-x-auto w-full border rounded-md shadow-sm">
+      <table className={`min-w-full bg-white border-collapse ${dense ? 'text-[10px]' : 'text-sm'}`}>
+        <thead className="bg-gray-100">
           <tr>
-            {enableSelect && (
-              <th className="px-4 py-2 border-b">
-                <input type="checkbox" checked={selectedRecords.length === data.length} onChange={handleSelectAll} />
-              </th>
-            )}
             {fields.map(field => (
-              <th key={field.name} className="px-4 py-2 border-b text-left">{field.label}</th>
+              <th key={field.name} className="p-2 border-b text-left font-bold text-gray-500 uppercase tracking-tighter whitespace-nowrap">
+                {dense ? (field.shortLabel || field.label) : field.label}
+              </th>
             ))}
-            <th className="px-4 py-2 border-b">Actions</th>
+            <th className="p-2 border-b text-center text-gray-500">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {data.map(record => (
-            <tr key={record[primaryKey]} className="hover:bg-gray-50">
-              {enableSelect && (
-                <td className="px-4 py-2 border-b">
-                  <input type="checkbox" checked={selectedRecords.includes(record)} onChange={() => handleSelect(record)} />
-                </td>
-              )}
+          {data.length > 0 ? data.map((record, index) => (
+            <tr key={index} className="hover:bg-blue-50/40 border-b last:border-0 transition-colors">
               {fields.map(field => (
-                <td key={field.name} className="px-4 py-2 border-b">
-                  {field.type === 'file' ? (
-                    record[field.name] ? (
-                      <img src={URL.createObjectURL(record[field.name])} alt="Uploaded" className="w-16 h-16 object-cover" />
-                    ) : 'No file'
+                <td key={field.name} className="p-2 whitespace-nowrap text-gray-600">
+                  {field.type === 'color' ? (
+                    <div className="w-3 h-3 rounded-full border" style={{ backgroundColor: record[field.name] }} />
+                  ) : field.type === 'file' ? (
+                    record[field.name] ? '📎' : '-'
                   ) : (
-                    record[field.name]
+                    record[field.name]?.toString() || '-'
                   )}
                 </td>
               ))}
-              <td className="px-4 py-2 border-b space-x-2">
-                {onEdit && <button onClick={() => onEdit(record)} className="text-blue-500 hover:text-blue-700"><FaEdit /></button>}
-                {onDelete && <button onClick={() => onDelete(record)} className="text-red-500 hover:text-red-700"><FaTrash /></button>}
-                {onView && <button onClick={() => onView(record)} className="text-green-500 hover:text-green-700"><FaEye /></button>}
-                {onPrint && <button onClick={() => onPrint(record)} className="text-purple-500 hover:text-purple-700"><FaPrint /></button>}
+              <td className="p-2 text-center flex justify-center items-center space-x-2">
+                {onView && (
+                  <button title="View" onClick={() => onView(record)} className="text-gray-400 hover:text-green-600 transition">
+                    <FaEye size={dense ? 11 : 14} />
+                  </button>
+                )}
+                {onEdit && (
+                  <button title="Edit" onClick={() => onEdit(record)} className="text-gray-400 hover:text-blue-600 transition">
+                    <FaEdit size={dense ? 11 : 14} />
+                  </button>
+                )}
+                {onPrint && (
+                  <button title="Print" onClick={() => onPrint(record)} className="text-gray-400 hover:text-purple-600 transition">
+                    <FaPrint size={dense ? 11 : 14} />
+                  </button>
+                )}
+                {onDelete && (
+                  <button title="Delete" onClick={() => onDelete(record)} className="text-gray-400 hover:text-red-600 transition">
+                    <FaTrash size={dense ? 11 : 14} />
+                  </button>
+                )}
               </td>
             </tr>
-          ))}
+          )) : (
+            <tr><td colSpan={fields.length + 1} className="p-4 text-center text-gray-400 italic">No data available</td></tr>
+          )}
         </tbody>
       </table>
     </div>

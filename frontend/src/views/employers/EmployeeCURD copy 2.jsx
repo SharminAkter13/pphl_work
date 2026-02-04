@@ -198,22 +198,18 @@ const EmployeeCRUD = () => {
           />
         )}
       </div>
-{isModalOpen && (
-  <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={`${modalType?.toUpperCase()} Record`}>
-    {modalType === 'delete' && (
-      <Delete onConfirm={onConfirmDelete} onClose={() => setIsModalOpen(false)} />
-    )}
-    {modalType === 'view' && (
-      <View data={currentRecord} fields={allFields} />
-    )}
-    {modalType === 'print' && (
-      <Print data={currentRecord} fields={tableFields} />
-    )}
-    {(modalType === 'add' || modalType === 'edit') && (
-      <Form fields={allFields} initialData={currentRecord || {}} onSubmit={onFormSubmit} onCancel={() => setIsModalOpen(false)} />
-    )}
-  </Modal>
-)}
+
+      {isModalOpen && (
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={`${modalType?.toUpperCase()} Record`}>
+          {modalType === 'delete' ? (
+            <Delete onConfirm={onConfirmDelete} onClose={() => setIsModalOpen(false)} />
+          ) : (modalType === 'add' || modalType === 'edit') ? (
+            <Form fields={allFields} initialData={currentRecord || {}} onSubmit={onFormSubmit} onCancel={() => setIsModalOpen(false)} />
+          ) : (
+            <View data={currentRecord} fields={allFields} onClose={() => setIsModalOpen(false)} />
+          )}
+        </Modal>
+      )}
     </div>
   );
 };

@@ -93,25 +93,28 @@ export const deleteProduct = (id) => {
 };
 
 
-export const fetchItems = () => {
-  return api.get("/employees");
-};
 
-export const getEmployees = (id) => {
+export const getEmployee = (id) => {
   return api.get(`/employees/${id}`);
 };
 
-export const createEmployees = (data) => {
-  return api.post("/employees", data);
-};
+export const getEmployees = () => api.get("/employees");
+
+export const createEmployees = (data) => api.post("/employees", data, {
+    headers: { "Content-Type": "multipart/form-data" }
+});
 
 export const updateEmployees = (id, data) => {
-  return api.put(`/employees/${id}`, data);
+    if (data instanceof FormData) {
+        data.append("_method", "PUT");
+    }
+    return api.post(`/employees/${id}`, data, {
+        headers: { "Content-Type": "multipart/form-data" }
+    });
 };
 
-export const deleteItem = (id) => {
-  return api.delete(`/employees/${id}`);
-};
+export const deleteItem = (id) => api.delete(`/employees/${id}`);
+
 
 
 

@@ -9,6 +9,7 @@ import SubcategoryForm from './views/sub-category/SubcategoryForm';
 import SupplierList from './views/suppliers/SupplierList';
 import SupplierForm from './views/suppliers/SupplierForm';
 import EmployerCurd from './views/employers/EmployerCurd';
+import EmployeeCURD from './views/employers/EmployeeCURD';
 import MasterLayout from "./components/layouts/MasterLayout";
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="suppliers" element={<SupplierList />} />
             <Route path="add-suppliers" element={<SupplierForm  />} />
             <Route path="employees" element={<EmployerCurd  />} />
+            <Route path="employers" element={<EmployeeCURD  />} />
           </Route>
         
       </Routes>

@@ -22,6 +22,7 @@ class Employee extends Authenticatable
         'joining_datetime',
         'department',
         'is_active',
+        'skills',
         'salary_range',
         'favorite_color',
         'joining_month',
