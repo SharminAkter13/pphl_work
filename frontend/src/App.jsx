@@ -16,22 +16,33 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-
-         <Route path="/" element={<MasterLayout  />}>
+         <Route path="/" element={<MasterLayout />}>
             <Route index element={<CategoryList />} />
+            
+            {/* Categories */}
             <Route path="categories" element={<CategoryList />} />
             <Route path="add-categories" element={<CategoryForm />} />
+            {/* Add this line to handle the Edit URL */}
+            <Route path="categories/edit/:id" element={<CategoryForm />} />
+
+            {/* Subcategories */}
             <Route path="subcategories" element={<SubcategoryList />} />
-            <Route path="add-subcategories" element={<SubcategoryForm  />} />
-           <Route path="products" element={<ProductList />} />
-   
-            <Route path="add-products" element={<ProductForm  />} />
+            <Route path="add-subcategories" element={<SubcategoryForm />} />
+            <Route path="subcategories/edit/:id" element={<SubcategoryForm />} />
+
+            {/* Products */}
+            <Route path="products" element={<ProductList />} />
+            <Route path="add-products" element={<ProductForm />} />
+            <Route path="products/edit/:id" element={<ProductForm />} />
+
+            {/* Suppliers */}
             <Route path="suppliers" element={<SupplierList />} />
-            <Route path="add-suppliers" element={<SupplierForm  />} />
-            <Route path="employees" element={<EmployerCurd  />} />
-            <Route path="employers" element={<EmployeeCURD  />} />
+            <Route path="add-suppliers" element={<SupplierForm />} />
+            <Route path="suppliers/edit/:id" element={<SupplierForm />} />
+
+            <Route path="employees" element={<EmployerCurd />} />
+            <Route path="employers" element={<EmployeeCURD />} />
           </Route>
-        
       </Routes>
     </BrowserRouter>
   );

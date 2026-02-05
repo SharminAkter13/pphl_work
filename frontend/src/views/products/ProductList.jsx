@@ -60,18 +60,32 @@ const ProductList = () => {
       </Button>
 
       <Table
-        fields={[
-    { name: 'product_name', label: 'Name' }, 
-    { name: 'sku', label: 'SKU' },
-    { name: 'category.category_name', label: 'Category' },
-    { name: 'supplier.supplier_name', label: 'Supplier' },
+       
+    fields={[
+  { name: 'product_name', label: 'Name' }, 
+  { name: 'sku', label: 'SKU' },
+  { 
+    name: 'category_name', 
+    label: 'Category',
+    render: (text, record) => record.category?.category_name || '-' 
+  },
+  { 
+    name: 'supplier_name', 
+    label: 'Supplier',
+    render: (text, record) => record.supplier?.supplier_name || '-' 
+  },
+
     { 
-      name: 'product_image', 
-      label: 'Image',
-      render: (text, record) => record.product_image ? (
-        <img src={`http://127.0.0.1:8000/storage/${record.product_image}`} className="w-10 h-10 object-cover" />
-      ) : 'No Image'
-    },
+  name: 'product_image', 
+  label: 'Image',
+  render: (text, record) => record.product_image ? (
+    <img 
+      src={`http://127.0.0.1:8000/product_images/${record.product_image}`} 
+      className="w-12 h-12 object-cover rounded border border-gray-600" 
+      alt={record.product_name}
+    />
+  ) : <span className="text-gray-500">No Image</span>
+},
     { name: 'status', label: 'Status' }
   ]}
   data={products} 

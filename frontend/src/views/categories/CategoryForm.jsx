@@ -37,12 +37,20 @@ const CategoryForm = () => {
     setFormData({ ...formData, [name]: files ? files[0] : value });
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const data = new FormData();
+
     Object.keys(formData).forEach(key => {
-      if (formData[key]) data.append(key, formData[key]);
+        if (key === 'category_image') {
+            if (formData[key] instanceof File) {
+                data.append(key, formData[key]);
+            }
+        } else if (formData[key] !== null && formData[key] !== undefined) {
+            data.append(key, formData[key]);
+        }
     });
+
 
     try {
       if (category) {

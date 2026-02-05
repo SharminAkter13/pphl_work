@@ -4,31 +4,27 @@ import { ASSET_URL } from '../../services/api';
 const Print = ({ data, fields }) => {
     if (!data) return null;
 
-    // Detect if record is an employee
     const isEmployee = !!data.name && !!data.email;
 
     return (
         <div className="bg-white p-8 max-w-4xl mx-auto print:p-0">
-            {/* --- HEADER / ACTION BAR (Hidden during actual print) --- */}
             <div className="no-print flex justify-between items-center mb-6 bg-gray-50 p-4 rounded-lg border">
                 <p className="text-sm text-gray-500 font-medium">
-                    Review document before printing.
+                    Review document 
                 </p>
                 <button 
                     onClick={() => window.print()} 
                     className="bg-blue-600 text-white px-6 py-2 rounded-md font-bold hover:bg-blue-700 transition flex items-center gap-2"
                 >
-                    <span>Print Document</span> 📄
+                    <span>Print </span> 
                 </button>
             </div>
 
-            {/* --- ACTUAL PRINTABLE AREA --- */}
             <div className="border-4 border-double border-gray-200 p-8">
-                {/* 1. DOCUMENT HEADER */}
                 <div className="flex justify-between items-start border-b-2 border-gray-900 pb-6 mb-8">
                     <div>
                         <h1 className="text-3xl font-black uppercase tracking-tighter text-gray-900">
-                            {isEmployee ? 'Personnel Record' : 'Product Specification'}
+                            {isEmployee ? 'Personal Record' : 'Product Specification'}
                         </h1>
                         <p className="text-gray-500 font-mono text-xs mt-1">
                             Reference ID: {data.id} | Generated: {new Date().toLocaleDateString()}
@@ -41,9 +37,7 @@ const Print = ({ data, fields }) => {
                     </div>
                 </div>
 
-                {/* 2. PRIMARY INFORMATION SECTION */}
                 <div className="flex gap-10 mb-10">
-                    {/* Visual Reference (Image) */}
                     <div className="w-40 h-40 bg-gray-50 border rounded-lg overflow-hidden flex-shrink-0">
                         {(data.profile_image || data.product_image) ? (
                             <img 
@@ -56,7 +50,6 @@ const Print = ({ data, fields }) => {
                         )}
                     </div>
 
-                    {/* Core Identifiers */}
                     <div className="flex-1">
                         <h2 className="text-4xl font-bold text-gray-900 mb-2">{data.name || data.product_name}</h2>
                         <p className="text-xl text-blue-700 font-semibold mb-6">
@@ -66,13 +59,12 @@ const Print = ({ data, fields }) => {
                         <div className="grid grid-cols-2 gap-y-4 text-sm">
                             <PrintRow label="Primary Contact" value={data.email || data.sku || 'N/A'} />
                             <PrintRow label="Secondary Ref" value={data.phone || data.base_price || 'N/A'} />
-                            <PrintRow label="Location/Origin" value={data.website || data.supplier_name || 'N/A'} />
+                            <PrintRow label="Website/Portfolio" value={data.website || data.supplier_name || 'N/A'} />
                             <PrintRow label="Effective Date" value={data.joining_datetime || data.created_at || 'N/A'} />
                         </div>
                     </div>
                 </div>
 
-                {/* 3. FULL DATA GRID (Every field mapped) */}
                 <div className="mb-10">
                     <h3 className="text-xs font-black bg-gray-900 text-white px-3 py-1 inline-block uppercase tracking-widest mb-4">
                         Detailed Specifications
@@ -89,7 +81,6 @@ const Print = ({ data, fields }) => {
                     </div>
                 </div>
 
-                {/* 4. VERIFICATION FOOTER */}
                 <div className="mt-20 grid grid-cols-2 gap-20">
                     <div className="border-t border-gray-400 pt-2">
                         <p className="text-[10px] font-bold text-gray-400 uppercase">Authorized Signature</p>
@@ -100,7 +91,6 @@ const Print = ({ data, fields }) => {
                 </div>
             </div>
 
-            {/* Print Styling */}
             <style dangerouslySetInnerHTML={{ __html: `
                 @media print {
                     .no-print { display: none !important; }

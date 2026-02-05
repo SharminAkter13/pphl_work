@@ -25,6 +25,8 @@ const EmployeeCRUD = () => {
 
   const searchFields = ['name', 'email', 'phone', 'department'];
 
+  // Field Name
+
   const allFields = [
     { 
       name: 'profile_image', 
@@ -44,6 +46,7 @@ const EmployeeCRUD = () => {
     { name: 'password', label: 'Password', type: 'password', required: true, hideInTable: true },
     { name: 'phone', label: 'Phone', shortLabel: 'Ph', type: 'text' },
     { name: 'website', label: 'Website', shortLabel: 'Web', type: 'url' },
+    { name: 'number', label: 'Age', shortLabel: 'Age', type: 'number', hideInTable: true },
     { name: 'office_time', label: 'Office Time', shortLabel: 'Time', type: 'time' },
     { 
       name: 'dob', 
@@ -128,9 +131,9 @@ const EmployeeCRUD = () => {
       Object.keys(data).forEach((key) => {
         const value = data[key];
         if (typeof value === 'boolean') {
-          formData.append(key, value ? 1 : 0); // Convert boolean for Laravel
+          formData.append(key, value ? 1 : 0); 
         } else if (Array.isArray(value)) {
-          value.forEach((val) => formData.append(`${key}[]`, val)); // Append arrays
+          value.forEach((val) => formData.append(`${key}[]`, val)); 
         } else if (value instanceof File) {
           formData.append(key, value);
         } else if (value !== null && value !== undefined) {

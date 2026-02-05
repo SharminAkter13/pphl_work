@@ -18,12 +18,12 @@ const Print = ({ data, fields = [] }) => {
     return (
         <div className="bg-white text-gray-900 font-sans p-4 max-w-4xl mx-auto">
             <div className="no-print flex justify-between items-center mb-6 bg-gray-50 p-4 rounded border">
-                <p className="text-sm text-gray-500 font-medium italic">Verify specifications before generating PDF.</p>
+                <p className="text-sm text-gray-500 font-medium italic">  Generating PDF.</p>
                 <button 
                     onClick={() => window.print()} 
                     className="bg-black text-white px-6 py-2 rounded font-bold hover:bg-gray-800 transition flex items-center gap-2"
                 >
-                    Print Invoice 📄
+                    Print 
                 </button>
             </div>
 
@@ -53,6 +53,7 @@ const Print = ({ data, fields = [] }) => {
                         <span className="font-bold">{new Date().toLocaleDateString()}</span>
                     </div>
                     <div className="p-3">
+                        
                     </div>
                 </div>
 
@@ -67,7 +68,7 @@ const Print = ({ data, fields = [] }) => {
                         <tr className="border-b-4 border-black uppercase text-sm font-black bg-gray-100">
                             <th className="p-3 border-r-4 border-black w-24">SKU</th>
                             <th className="p-3 border-r-4 border-black">Item Description</th>
-                            <th className="p-3 border-r-4 border-black w-24 text-center">Qty</th>
+                            <th className="p-3 border-r-4 border-black w-24 text-center">Qty/Size</th>
                             <th className="p-3 border-r-4 border-black w-32 text-right">Unit Price</th>
                             <th className="p-3 w-32 text-right">Price</th>
                         </tr>
