@@ -2,7 +2,7 @@ import React from 'react';
 import { FaEdit, FaTrash, FaEye, FaPrint } from 'react-icons/fa'; 
 
 const Table = ({ fields, data, dense = false, onEdit, onDelete, onView, onPrint, style = {} }) => {
-  const tableStyle = { tableLayout: 'fixed', width: '100%', ...style };
+  const tableStyle = { tableLayout: 'fixed', width: '90%', ...style };
 
   return (
     <div className="overflow-x-hidden w-full border rounded-md shadow-sm">  
@@ -13,7 +13,7 @@ const Table = ({ fields, data, dense = false, onEdit, onDelete, onView, onPrint,
         <thead className="bg-gray-100">
           <tr>
             {fields.map(field => (
-              <th key={field.name} className="p-2 border-b text-left font-bold text-gray-500 uppercase tracking-tighter whitespace-nowrap">
+              <th key={field.name} className="p-2 border-b text-left font-bold text-black-500 uppercase tracking-tighter whitespace-nowrap">
                 {dense ? (field.shortLabel || field.label) : field.label}
               </th>
             ))}
@@ -24,7 +24,7 @@ const Table = ({ fields, data, dense = false, onEdit, onDelete, onView, onPrint,
           {data.length > 0 ? data.map((record, index) => (
             <tr key={index} className="hover:bg-blue-50/40 border-b last:border-0 transition-colors">
               {fields.map(field => (
-                <td key={field.name} className="p-2 whitespace-nowrap text-gray-600 overflow-hidden text-ellipsis max-w-0">  
+                <td key={field.name} className="p-2 whitespace-nowrap text-green-600 overflow-hidden text-ellipsis max-w-0">  
                   {field.render ? field.render(record[field.name], record) : (  
                     field.type === 'color' ? (
                       <div className="w-3 h-3 rounded-full border" style={{ backgroundColor: record[field.name] }} />

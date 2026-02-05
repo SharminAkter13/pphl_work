@@ -9,7 +9,7 @@ import Dropdown from '../../components/Dropdown';
 const SubcategoryForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const subcategory = location.state?.subcategory; // Get data if editing
+  const subcategory = location.state?.subcategory; 
 
   const [formData, setFormData] = useState({
     category_id: '',
@@ -57,17 +57,15 @@ const SubcategoryForm = () => {
 
     try {
       if (subcategory) {
-        // Update existing subcategory
-        await api.post(`/sub-cat/${subcategory.id}`, data, {
+        await api.put(`/sub-cat/${subcategory.id}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       } else {
-        // Create new subcategory
         await api.post('/sub-cat', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       }
-      navigate('/subcategories'); // Go back to subcategory list
+      navigate('/subcategories'); 
     } catch (err) {
       console.error(err);
       alert('Error saving subcategory');

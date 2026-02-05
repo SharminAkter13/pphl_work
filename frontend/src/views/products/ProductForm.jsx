@@ -32,7 +32,6 @@ const ProductForm = () => {
 
   useEffect(() => {
     fetchOptions();
-    // If we have product data from location state, populate the form
     if (product) {
       setFormData({
         product_name: product.product_name || '',
@@ -78,12 +77,11 @@ const ProductForm = () => {
 
     try {
       if (product) {
-        // Use PUT or POST depending on your API for updates
-        await api.post(`/products/${product.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.put(`/products/${product.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
         await api.post('/products', data, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
-      navigate('/products'); // Redirect back to product list on success
+      navigate('/products'); 
     } catch {
       alert('Error saving product');
     } finally {

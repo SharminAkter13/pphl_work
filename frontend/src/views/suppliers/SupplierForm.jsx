@@ -9,7 +9,7 @@ import Dropdown from '../../components/Dropdown';
 const SupplierForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const supplier = location.state?.supplier; // If editing, get supplier data
+  const supplier = location.state?.supplier; 
 
   const [formData, setFormData] = useState({
     supplier_name: '',
@@ -43,13 +43,11 @@ const SupplierForm = () => {
     setLoading(true);
     try {
       if (supplier) {
-        // Update supplier
         await api.put(`/supplier/${supplier.id}`, formData);
       } else {
-        // Create new supplier
         await api.post('/supplier', formData);
       }
-      navigate('/suppliers'); // Redirect to supplier list
+      navigate('/suppliers'); 
     } catch (err) {
       console.error(err);
       alert('Error saving supplier');

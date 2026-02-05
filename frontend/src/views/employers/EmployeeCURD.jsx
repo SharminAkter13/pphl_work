@@ -67,6 +67,7 @@ const EmployeeCRUD = () => {
       label: 'Active', 
       shortLabel: 'Act', 
       type: 'checkbox',
+      hideInTable: true ,
       render: (val) => val ? <span className="text-green-600">Yes</span> : <span className="text-red-600">No</span>
     },
     { name: 'salary_range', label: 'Salary', shortLabel: 'Sal', type: 'range' },
@@ -168,8 +169,8 @@ const EmployeeCRUD = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen" style={{ overflowX: 'hidden' }}>  {/* Prevent horizontal scroll on the entire page */}
-      <div className="bg-white rounded shadow-sm border p-4" style={{ width: '100%' }}>  {/* Ensure full width but no overflow */}
+    <div className="p-2 bg-gray-50 min-h-screen" style={{ overflowX: 'hidden' }}>  
+      <div className="bg-gray rounded shadow-sm border p-4" style={{ width: '100%' }}> 
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xs font-bold text-gray-500 uppercase">Employee Management</h2>
           <button onClick={() => handleAction('add')} className="bg-blue-600 text-white px-3 py-1 rounded text-xs flex items-center">

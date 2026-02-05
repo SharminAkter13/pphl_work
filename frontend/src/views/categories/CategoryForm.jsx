@@ -46,13 +46,11 @@ const CategoryForm = () => {
 
     try {
       if (category) {
-        // Update existing category
-        await api.post(`/categories/${category.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.put(`/categories/${category.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
-        // Create new category
         await api.post('/categories', data, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
-      navigate('/categories'); // Go back to category list
+      navigate('/categories'); 
     } catch (error) {
       alert('Error saving category');
     } finally {

@@ -16,7 +16,6 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        // Validation rules
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email',
@@ -27,10 +26,10 @@ class EmployeeController extends Controller
             'dob' => 'nullable|date',
             'office_time' => 'nullable|date_format:H:i',
             'joining_datetime' => 'nullable|date',
-            'department' => 'nullable|in:HR,IT,Finance,Marketing', // Radio (single)
-            'is_active' => 'boolean', // Single checkbox
-            'skills' => 'nullable|array', // Multiple checkboxes
-            'skills.*' => 'in:JavaScript,React,PHP,Laravel,Python', // Valid skill options
+            'department' => 'nullable|in:HR,IT,Finance,Marketing', 
+            'is_active' => 'boolean', 
+            'skills' => 'nullable|array', 
+            'skills.*' => 'in:JavaScript,React,PHP,Laravel,Python', 
             'salary_range' => 'nullable|integer|min:0|max:100',
             'favorite_color' => 'nullable|string|regex:/^#[a-fA-F0-9]{6}$/',
             'joining_month' => 'nullable|string|regex:/^\d{4}-\d{2}$/',
@@ -39,12 +38,10 @@ class EmployeeController extends Controller
             'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
-        // Prepare data
         $data = $request->all();
         $data['password'] = Hash::make($request->password);
-        $data['skills'] = json_encode($request->skills); // Store as JSON
+        $data['skills'] = json_encode($request->skills); 
 
-        // Handle file uploads
         if ($request->hasFile('profile_image')) {
             $data['profile_image'] = $request->file('profile_image')->store('images', 'public');
         }
@@ -52,7 +49,6 @@ class EmployeeController extends Controller
             $data['resume'] = $request->file('resume')->store('resumes', 'public');
         }
 
-        // Create employee
         $employee = Employee::create($data);
 
         return response()->json($employee, 201);
@@ -61,7 +57,7 @@ class EmployeeController extends Controller
     public function show($id)
     {
         $employee = Employee::findOrFail($id);
-        $employee->skills = json_decode($employee->skills, true); // Decode for frontend
+        $employee->skills = json_decode($employee->skills, true); 
         return $employee;
     }
 
@@ -69,7 +65,6 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findOrFail($id);
 
-        // Validation
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email,' . $id,
@@ -92,7 +87,6 @@ class EmployeeController extends Controller
             'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
-        // Prepare data
         $data = $request->all();
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
@@ -101,7 +95,6 @@ class EmployeeController extends Controller
         }
         $data['skills'] = json_encode($request->skills);
 
-        // Handle file uploads
         if ($request->hasFile('profile_image')) {
             if ($employee->profile_image) {
                 Storage::disk('public')->delete($employee->profile_image);
@@ -115,7 +108,6 @@ class EmployeeController extends Controller
             $data['resume'] = $request->file('resume')->store('resumes', 'public');
         }
 
-        // Update employee
         $employee->update($data);
 
         return response()->json($employee);
@@ -125,7 +117,6 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findOrFail($id);
 
-        // Delete associated files
         if ($employee->profile_image) {
             Storage::disk('public')->delete($employee->profile_image);
         }
