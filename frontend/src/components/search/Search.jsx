@@ -1,45 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Search = ({ searchFields, fields, onFilterChange, multiple = true }) => {
   const [filters, setFilters] = useState({});
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onFilterChange(filters);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [filters, onFilterChange]);
+
   const handleChange = (field, value) => {
-    const newFilters = { ...filters, [field]: value };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
+    setFilters(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSearch = () => {
+    onFilterChange(filters);
   };
 
   const clearFilters = () => {
-    setFilters({});
-    onFilterChange({});
+    const emptyFilters = {};
+    setFilters(emptyFilters);
+    onFilterChange(emptyFilters);
   };
 
   return (
-    <div className="mb-4 space-y-2">
+    <div className="flex flex-wrap items-end gap-4">
       {searchFields.map(field => {
-        const label = fields.find(f => f.name === field)?.label || field;
+        const fieldDef = fields.find(f => f.name === field);
+        const label = fieldDef?.label || field;
+        
+        const isDateField = fieldDef?.type === 'date' || field.toLowerCase().includes('date');
+
         return (
-          <div key={field} className="flex items-center space-x-2">
-            <label className="text-sm font-medium">{label}:</label>
+          <div key={field} className="flex flex-col min-w-[200px] flex-1">
+            <label className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-tight">
+              {label}
+            </label>
             <input
-              type="text"
-              placeholder={`Search ${label}`}
+              type={isDateField ? "date" : "text"}
+              placeholder={`Search ${label}...`}
               value={filters[field] || ''}
               onChange={(e) => handleChange(field, e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="px-3 py-1.5 text-sm border border-gray-300 rounded shadow-sm focus:ring-1 focus:ring-blue-500 focus:outline-none bg-white min-h-[34px]"
             />
           </div>
         );
       })}
 
-      {multiple && (
+      <div className="flex gap-2">
         <button
-          onClick={clearFilters}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+          onClick={handleSearch}
+          className="px-6 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition-colors shadow-sm"
         >
-          Clear Filters
+          Search
         </button>
-      )}
+
+        {multiple && Object.values(filters).some(v => v !== '') && (
+          <button
+            onClick={clearFilters}
+            className="px-4 py-1.5 bg-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-300 transition-colors"
+          >
+            Reset
+          </button>
+        )}
+      </div>
     </div>
   );
 };

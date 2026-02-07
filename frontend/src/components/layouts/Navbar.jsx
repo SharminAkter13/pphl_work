@@ -15,7 +15,7 @@ const Navbar = ({ user, onLogout }) => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">
-              SupplyChain
+             Home
             </Link>
           </div>
 

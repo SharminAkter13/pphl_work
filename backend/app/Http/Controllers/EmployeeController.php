@@ -9,10 +9,29 @@ use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
-    public function index()
-    {
-        return Employee::all();
+
+public function index(Request $request)
+{
+    $query = Employee::query();
+
+    $searchableColumns = [
+        'name',
+        'email',
+        'phone',
+        'joining_datetime',
+        'department'
+    ];
+
+    foreach ($searchableColumns as $column) {
+        if ($request->filled($column)) {
+            $query->where($column, 'like', '%' . $request->input($column) . '%');
+        }
     }
+
+    return response()->json(
+        $query->latest()->paginate(10)
+    );
+}
 
     public function store(Request $request)
     {

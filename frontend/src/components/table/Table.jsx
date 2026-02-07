@@ -61,7 +61,7 @@ const Table = ({
                 {dense ? (field.shortLabel || field.label) : field.label}
               </th>
             ))}
-            <th className="p-2 border-b text-center text-gray-500">Actions</th>
+            <th className="p-2 border-b text-center text-black-500">Actions</th>
           </tr>
         </thead>
         <tbody>
